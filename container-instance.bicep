@@ -73,7 +73,7 @@ resource MinecraftServerContainer 'Microsoft.ContainerInstance/containerGroups@2
           resources: {
             requests: {
               cpu: 1
-              memoryInGB: 2
+              memoryInGB: 4
             }
           }
           environmentVariables: [
