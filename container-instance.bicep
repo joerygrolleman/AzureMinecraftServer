@@ -1,5 +1,8 @@
 param location string = 'westeurope'
-
+param dockerUsername string
+@secure()
+param dockerPassword string
+param serverName string
 targetScope = 'resourceGroup'
 
 resource MinecraftServerManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
@@ -8,7 +11,7 @@ resource MinecraftServerManagedIdentity 'Microsoft.ManagedIdentity/userAssignedI
 }
 
 resource MinecraftStorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: 'saminecraftserverarcady'
+  name: 'sa${serverName}'
   location: location
   sku: {
     name: 'Standard_LRS'
@@ -80,11 +83,15 @@ resource MinecraftServerContainer 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
               name: 'SERVER_NAME'
-              value: 'MineCady'
+              value: serverName
             }
             {
               name: 'RCON_PASSWORD'
               value: 'password'
+            }
+            {
+              name: 'MEMORY'
+              value: '4G'
             }
           ]
         }
@@ -112,5 +119,12 @@ resource MinecraftServerContainer 'Microsoft.ContainerInstance/containerGroups@2
       ]
     }
     restartPolicy: 'OnFailure'
+    imageRegistryCredentials: [
+      {
+        server: 'index.docker.io'
+        username: dockerUsername
+        password: dockerPassword
+      }
+    ]
   }
 }
