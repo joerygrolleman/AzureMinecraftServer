@@ -111,6 +111,7 @@ resource MinecraftServerContainer 'Microsoft.ContainerInstance/containerGroups@2
     osType: 'Linux'
     ipAddress: {
       type: 'Public'
+      dnsNameLabel: serverName
       ports: [
         {
           protocol: 'TCP'
